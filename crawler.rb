@@ -11,7 +11,7 @@ form['searchTerm'] = 'sw16'
 results_page = form.submit
 
 results = []
-filename = 'refs.csv'
+filename = 'crawling_results.csv'
 File.write(filename, '')
 next_link = results_page.link_with(text: '»')
 
