@@ -1,3 +1,5 @@
+# we'll scrape properties' reference and url
+
 # open the website
 require 'mechanize'
 agent = Mechanize.new
@@ -9,7 +11,8 @@ form['searchTerm'] = 'sw16'
 results_page = form.submit
 
 results = []
-File.write('refs_and_urls.csv', '')
+filename = 'refs.csv'
+File.write(filename, '')
 next_link = results_page.link_with(text: '»')
 
 count = 0
@@ -22,7 +25,7 @@ begin
     trs.each do |tr|
         bar = tr.search('td.first').text
         url = tr.search('a').first['href']
-        open('refs_and_urls.csv', 'a') { |f| f.puts "#{bar},#{url}" }
+        open(filename, 'a') { |f| f.puts "#{bar},#{url}" }
     end
     next_link = results_page.link_with(text: '»')
     p count+=1 if count%20 == 0
