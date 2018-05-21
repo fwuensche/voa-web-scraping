@@ -16,20 +16,23 @@ File.write(filename, '')
 next_link = results_page.link_with(text: '»')
 
 count = 0
-begin
+# until there is no next page
+until next_link.nil?
     # go to the next page
     results_page = next_link.click
 
     # get the results
-    trs = results_page.search('tbody tr')
-    trs.each do |tr|
-        bar = tr.search('td.first').text
-        url = tr.search('a').first['href']
-        open(filename, 'a') { |f| f.puts "#{bar},#{url}" }
+    properties = results_page.search('tbody tr')
+    properties.each do |property|
+        barcode = property.search('td.first').text
+        url = property.search('a').first['href']
+        open(filename, 'a') { |f| f.puts "#{barcode},#{url}" }
     end
     next_link = results_page.link_with(text: '»')
-    p count+=1 if count%20 == 0
-    #sleep(1)
-end until next_link.nil?
+    
+    # print out every multiple of 20 (just for visual feedback)
+    p count += 1 if count % 20 == 0
+end
 
-p count
+# print total number of scraped properties
+p "You've just scraped: #{count} properties"
